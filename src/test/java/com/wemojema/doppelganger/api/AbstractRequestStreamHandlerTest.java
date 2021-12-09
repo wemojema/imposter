@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 
-class AbstractHandlerTest extends AbstractTest {
+class AbstractRequestStreamHandlerTest extends AbstractTest {
 
-    class UUT extends AbstractHandler {
+    class UUT extends AbstractRequestStreamHandler {
 
     }
 
