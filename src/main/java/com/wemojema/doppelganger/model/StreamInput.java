@@ -6,7 +6,8 @@ import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
 import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.wemojema.doppelganger.api.UnknownInputStreamSourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class StreamInput {
     private static final Logger logger = LoggerFactory.getLogger(StreamInput.class);
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final JsonMapper objectMapper;
     private final String json;
     private Type type;
 
@@ -29,7 +30,10 @@ public class StreamInput {
                 new InputStreamReader(input, StandardCharsets.UTF_8))
                 .lines()
                 .collect(Collectors.joining("\n"));
-        logger.trace("String value of InputStream:\n" + json);
+        logger.trace("Received InputStream:\n" + json);
+        objectMapper = JsonMapper.builder()
+                .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
+                .build();
         identify();
     }
 
@@ -63,25 +67,45 @@ public class StreamInput {
     }
 
     private void identify() {
-        if(identifiesAsAPIGatewayV2HTTPEvent())
+        if (identifiesAsAPIGatewayV2HTTPEvent()) {
             this.type = APIGatewayV2HTTPEvent.class;
-        if (identifiesAsALBRequestEvent())
+            return;
+        }
+        if (identifiesAsALBRequestEvent()) {
             this.type = ApplicationLoadBalancerRequestEvent.class;
+            return;
+        }
+        if (identifiesAsSQSEvent()) {
+            this.type = SQSEvent.class;
+            return;
+        }
 
-            // todo identify other input streams here - maybe
+        // todo identify other input streams here
 
-        else
-            throw new UnknownInputStreamSourceException("InputStream must be one of the following Types: [" +
-                    "APIGatewayV2HTTPEvent, " +
-                    "ApplicationLoadBalancerRequestEvent, " +
-                    "DynamodbEvent, " +
-                    "S3Event, " +
-                    "SQSEvent" +
-                    "]");
+        throw new UnknownInputStreamSourceException("InputStream must be one of the following Types: [" +
+                "APIGatewayV2HTTPEvent, " +
+                "ApplicationLoadBalancerRequestEvent, " +
+                "DynamodbEvent, " +
+                "S3Event, " +
+                "SQSEvent" +
+                "]");
     }
 
     private boolean identifiesAsAPIGatewayV2HTTPEvent() {
-        return false;
+        return json.contains("\"requestContext\"") &&
+                json.contains("\"http\"") &&
+                json.contains("\"method\"") &&
+                json.contains("\"protocol\"") &&
+                json.contains("\"stage\"") &&
+                json.contains("\"routeKey\"");
+    }
+
+    private boolean identifiesAsSQSEvent() {
+        return json.contains("\"eventSource\"") &&
+                json.contains("\"aws:sqs\"") &&
+                json.contains("\"eventSourceARN\"") &&
+                json.contains(":sqs:") &&
+                json.contains("\"md5OfBody\"");
     }
 
     private boolean identifiesAsALBRequestEvent() {
