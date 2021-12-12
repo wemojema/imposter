@@ -2,8 +2,8 @@ package com.wemojema.doppelganger.api;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
+import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wemojema.AbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +26,10 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
             AbstractRequestStreamHandlerTest.class.getClassLoader().getResourceAsStream("sample-json/dynamodb.json")
             , "sample json InputStream cannot be null"
     );
+    InputStream s3InputStream = Objects.requireNonNull(
+            AbstractRequestStreamHandlerTest.class.getClassLoader().getResourceAsStream("sample-json/s3event.json")
+            , "sample json InputStream cannot be null"
+    );
 
     class UUT extends AbstractRequestStreamHandler {
         String invokedMethod;
@@ -44,12 +48,16 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
         void handle(DynamodbEvent event) {
             this.invokedMethod = "handle(DynamodbEvent event)";
         }
+
+        @Override
+        void handle(S3Event event) {
+            this.invokedMethod = "handle(S3Event event)";
+        }
     }
 
     UUT uut;
 
     public static class Pojo {
-        @JsonProperty
         public String test;
 
         public Pojo(String test) {
@@ -85,6 +93,12 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
     void should_identify_a_DynamodbEvent_when_provided_a_valid_payload_for_such_an_event() {
         uut.handleRequest(ddbInputStream, new ByteArrayOutputStream(), null);
         Assertions.assertEquals("handle(DynamodbEvent event)", uut.invokedMethod);
+    }
+
+    @Test
+    void should_identify_a_S3EventNotification_when_provided_a_valid_payload_for_such_an_event() {
+        uut.handleRequest(s3InputStream, new ByteArrayOutputStream(), null);
+        Assertions.assertEquals("handle(S3Event event)", uut.invokedMethod);
     }
 
 }

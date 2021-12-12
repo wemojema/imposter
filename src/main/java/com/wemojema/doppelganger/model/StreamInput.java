@@ -1,13 +1,13 @@
 package com.wemojema.doppelganger.model;
 
+import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.core.JsonProcessingException;
+import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.DeserializationFeature;
+import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.ObjectMapper;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
 import com.amazonaws.services.lambda.runtime.events.ApplicationLoadBalancerRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
 import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.wemojema.doppelganger.api.UnknownInputStreamSourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 public class StreamInput {
     private static final Logger logger = LoggerFactory.getLogger(StreamInput.class);
-    private final JsonMapper objectMapper;
     private final String json;
     private Type type;
 
@@ -31,9 +30,6 @@ public class StreamInput {
                 .lines()
                 .collect(Collectors.joining("\n"));
         logger.trace("Received InputStream:\n" + json);
-        objectMapper = JsonMapper.builder()
-                .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
-                .build();
         identify();
     }
 
@@ -79,8 +75,12 @@ public class StreamInput {
             this.type = SQSEvent.class;
             return;
         }
-        if(identifiesAsDDBEvent()) {
+        if (identifiesAsDDBEvent()) {
             this.type = DynamodbEvent.class;
+            return;
+        }
+        if (identifiesAsS3Event()) {
+            this.type = S3Event.class;
             return;
         }
         // todo identify other input streams here
@@ -92,6 +92,14 @@ public class StreamInput {
                 "S3Event, " +
                 "SQSEvent" +
                 "]");
+    }
+
+    private boolean identifiesAsS3Event() {
+        return json.contains("\"aws:s3\"") &&
+                json.contains("\"s3\"") &&
+                json.contains("\"object\"") &&
+                json.contains("\"bucket\"") &&
+                json.contains("\"s3SchemaVersion\"");
     }
 
     private boolean identifiesAsDDBEvent() {
@@ -126,7 +134,7 @@ public class StreamInput {
 
     private <T> T map(Class<T> clazz) {
         try {
-            return objectMapper.readValue(json, clazz);
+            return new ObjectMapper().readerFor(clazz).withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).readValue(json);
         } catch (JsonProcessingException e) {
             logger.error("Failed to Cast InputStream to " + clazz.getName() +
                     " enable TRACE logging to see the String value of the InputStream", e);
