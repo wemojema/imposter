@@ -79,7 +79,10 @@ public class StreamInput {
             this.type = SQSEvent.class;
             return;
         }
-
+        if(identifiesAsDDBEvent()) {
+            this.type = DynamodbEvent.class;
+            return;
+        }
         // todo identify other input streams here
 
         throw new UnknownInputStreamSourceException("InputStream must be one of the following Types: [" +
@@ -89,6 +92,13 @@ public class StreamInput {
                 "S3Event, " +
                 "SQSEvent" +
                 "]");
+    }
+
+    private boolean identifiesAsDDBEvent() {
+        return json.contains("\"aws:dynamodb\"") &&
+                json.contains("\"Records\"") &&
+                json.contains("\"eventName\"") &&
+                json.contains("\"dynamodb\"");
     }
 
     private boolean identifiesAsAPIGatewayV2HTTPEvent() {

@@ -1,6 +1,7 @@
 package com.wemojema.doppelganger.api;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
+import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wemojema.AbstractTest;
@@ -19,7 +20,11 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
 
     InputStream sqsInputStream = Objects.requireNonNull(
             AbstractRequestStreamHandlerTest.class.getClassLoader().getResourceAsStream("sample-json/sqs-event.json")
-            ,"sample json InputStream cannot be null"
+            , "sample json InputStream cannot be null"
+    );
+    InputStream ddbInputStream = Objects.requireNonNull(
+            AbstractRequestStreamHandlerTest.class.getClassLoader().getResourceAsStream("sample-json/dynamodb.json")
+            , "sample json InputStream cannot be null"
     );
 
     class UUT extends AbstractRequestStreamHandler {
@@ -33,6 +38,11 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
         @Override
         void handle(SQSEvent event) {
             this.invokedMethod = "handle(SQSEvent event)";
+        }
+
+        @Override
+        void handle(DynamodbEvent event) {
+            this.invokedMethod = "handle(DynamodbEvent event)";
         }
     }
 
@@ -69,6 +79,12 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
     void should_identify_an_SQSEvent_when_provided_a_valid_payload_for_such_an_event() {
         uut.handleRequest(sqsInputStream, new ByteArrayOutputStream(), null);
         Assertions.assertEquals("handle(SQSEvent event)", uut.invokedMethod);
+    }
+
+    @Test
+    void should_identify_a_DynamodbEvent_when_provided_a_valid_payload_for_such_an_event() {
+        uut.handleRequest(ddbInputStream, new ByteArrayOutputStream(), null);
+        Assertions.assertEquals("handle(DynamodbEvent event)", uut.invokedMethod);
     }
 
 }
