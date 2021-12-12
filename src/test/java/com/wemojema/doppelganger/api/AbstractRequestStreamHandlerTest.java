@@ -1,6 +1,7 @@
 package com.wemojema.doppelganger.api;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
+import com.amazonaws.services.lambda.runtime.events.ApplicationLoadBalancerRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
 import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
@@ -30,6 +31,11 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
             AbstractRequestStreamHandlerTest.class.getClassLoader().getResourceAsStream("sample-json/s3event.json")
             , "sample json InputStream cannot be null"
     );
+    InputStream albInputStream = Objects.requireNonNull(
+            AbstractRequestStreamHandlerTest.class.getClassLoader().getResourceAsStream("sample-json/alb-event.json")
+            , "sample json InputStream cannot be null"
+    );
+
 
     class UUT extends AbstractRequestStreamHandler {
         String invokedMethod;
@@ -52,6 +58,11 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
         @Override
         void handle(S3Event event) {
             this.invokedMethod = "handle(S3Event event)";
+        }
+
+        @Override
+        void handle(ApplicationLoadBalancerRequestEvent event) {
+            this.invokedMethod = "handle(ApplicationLoadBalancerRequestEvent event)";
         }
     }
 
@@ -99,6 +110,12 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
     void should_identify_a_S3EventNotification_when_provided_a_valid_payload_for_such_an_event() {
         uut.handleRequest(s3InputStream, new ByteArrayOutputStream(), null);
         Assertions.assertEquals("handle(S3Event event)", uut.invokedMethod);
+    }
+
+    @Test
+    void should_identify_an_ApplicationLoadBalancerEvent_when_provided_a_valid_payload_for_such_an_event() {
+        uut.handleRequest(albInputStream, new ByteArrayOutputStream(), null);
+        Assertions.assertEquals("handle(ApplicationLoadBalancerRequestEvent event)", uut.invokedMethod);
     }
 
 }
