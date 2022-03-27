@@ -2,17 +2,15 @@ package com.wemojema.doppelganger.model;
 
 import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.core.JsonProcessingException;
 import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.DeserializationFeature;
+import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.MapperFeature;
 import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.ObjectMapper;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
-import com.amazonaws.services.lambda.runtime.events.ApplicationLoadBalancerRequestEvent;
-import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
-import com.amazonaws.services.lambda.runtime.events.S3Event;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
+import com.amazonaws.services.lambda.runtime.events.*;
 import com.wemojema.doppelganger.api.UnknownInputStreamSourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -31,6 +29,11 @@ public class StreamInput {
                 .collect(Collectors.joining("\n"));
         logger.trace("Received InputStream:\n" + json);
         identify();
+    }
+
+
+    public InputStream asInputStream() {
+        return new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
     }
 
     public Class<?> identifiesAs() {
@@ -134,7 +137,12 @@ public class StreamInput {
 
     private <T> T map(Class<T> clazz) {
         try {
-            return new ObjectMapper().readerFor(clazz).withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).readValue(json);
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+            return objectMapper
+                    .readerFor(clazz)
+                    .withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                    .readValue(json);
         } catch (JsonProcessingException e) {
             logger.error("Failed to Cast InputStream to " + clazz.getName() +
                     " enable TRACE logging to see the String value of the InputStream", e);

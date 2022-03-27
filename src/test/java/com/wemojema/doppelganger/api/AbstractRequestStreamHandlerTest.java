@@ -1,10 +1,6 @@
 package com.wemojema.doppelganger.api;
 
-import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
-import com.amazonaws.services.lambda.runtime.events.ApplicationLoadBalancerRequestEvent;
-import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
-import com.amazonaws.services.lambda.runtime.events.S3Event;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
+import com.amazonaws.services.lambda.runtime.events.*;
 import com.wemojema.AbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,27 +37,29 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
         String invokedMethod;
 
         @Override
-        void handle(APIGatewayV2HTTPEvent event) {
+        public void handle(APIGatewayV2HTTPEvent event) {
             this.invokedMethod = "handle(APIGatewayV2HTTPEvent event)";
         }
 
         @Override
-        void handle(SQSEvent event) {
+        public void handle(SQSEvent event) {
+            assert event != null;
+            assert event.getRecords() != null;
             this.invokedMethod = "handle(SQSEvent event)";
         }
 
         @Override
-        void handle(DynamodbEvent event) {
+        public void handle(DynamodbEvent event) {
             this.invokedMethod = "handle(DynamodbEvent event)";
         }
 
         @Override
-        void handle(S3Event event) {
+        public void handle(S3Event event) {
             this.invokedMethod = "handle(S3Event event)";
         }
 
         @Override
-        void handle(ApplicationLoadBalancerRequestEvent event) {
+        public void handle(ApplicationLoadBalancerRequestEvent event) {
             this.invokedMethod = "handle(ApplicationLoadBalancerRequestEvent event)";
         }
     }

@@ -2,25 +2,23 @@ package com.wemojema.doppelganger.api;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
-import com.amazonaws.services.lambda.runtime.events.ApplicationLoadBalancerRequestEvent;
-import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
-import com.amazonaws.services.lambda.runtime.events.S3Event;
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
+import com.amazonaws.services.lambda.runtime.events.*;
 import com.wemojema.doppelganger.model.StreamInput;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class AbstractRequestStreamHandler implements RequestStreamHandler {
+public abstract class AbstractRequestStreamHandler implements RequestStreamHandler {
     protected OutputStream outputStream;
     protected Context context;
+    protected InputStream inputStream;
 
     @Override
     public void handleRequest(InputStream input, OutputStream output, Context context) {
         this.outputStream = output;
         this.context = context;
         StreamInput streamInput = new StreamInput(input);
+        this.inputStream = streamInput.asInputStream();
         switch (streamInput.identifiesAs().getSimpleName()) {
             case "APIGatewayV2HTTPEvent":
                 handle(streamInput.asApiGWEvent());
@@ -40,25 +38,15 @@ public class AbstractRequestStreamHandler implements RequestStreamHandler {
         }
     }
 
-    void handle(APIGatewayV2HTTPEvent event) {
-        throwMissingHandlerException(APIGatewayV2HTTPEvent.class);
-    }
+    public abstract void handle(APIGatewayV2HTTPEvent event);
 
-    void handle(SQSEvent event) {
-        throwMissingHandlerException(SQSEvent.class);
-    }
+    public abstract void handle(SQSEvent event);
 
-    void handle(DynamodbEvent event) {
-        throwMissingHandlerException(DynamodbEvent.class);
-    }
+    public abstract void handle(DynamodbEvent event);
 
-    void handle(ApplicationLoadBalancerRequestEvent event) {
-        throwMissingHandlerException(ApplicationLoadBalancerRequestEvent.class);
-    }
+    public abstract void handle(ApplicationLoadBalancerRequestEvent event);
 
-    void handle(S3Event event) {
-        throwMissingHandlerException(S3Event.class);
-    }
+    public abstract void handle(S3Event event);
 
     private <T> void throwMissingHandlerException(Class<T> clazz) {
         throw new MissingHandlerException("The Handler for the " + clazz.getSimpleName() +

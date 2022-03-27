@@ -4,13 +4,13 @@ plugins {
 }
 
 group 'com.wemojema'
-version '0.1.0'
+version '0.1.3'
 
 repositories {
     mavenLocal()
     mavenCentral()
 }
-
+// todo name this package _imposter_ which is cooler than doppelganger
 publishing {
     publications {
         mavenJava(MavenPublication) {
