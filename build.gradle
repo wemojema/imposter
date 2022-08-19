@@ -10,15 +10,17 @@ repositories {
     mavenLocal()
     mavenCentral()
 }
-// todo name this package _imposter_ which is cooler than doppelganger
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'doppelganger'
+            artifactId = 'imposter'
             from components.java
             pom {
-                name = 'doppelganger'
-                description = 'A Java Library to identify the origin of an inbound InputStream for AWS Lambda StreamHandler'
+                name = 'imposter'
+                description = 'A Java Library to identify the origin of ' +
+                        'an inbound InputStream in an AWS Lambda ' +
+                        'StreamHandler implementation.'
             }
         }
     }
@@ -34,9 +36,9 @@ dependencies {
     implementation 'com.amazonaws:aws-lambda-java-serialization:1.0.0'
     implementation 'org.slf4j:slf4j-api:1.7.36'
 
-    testImplementation 'io.symphonia:lambda-logging:1.0.0'
+    testImplementation 'io.symphonia:lambda-logging:1.0.3'
     testImplementation 'com.github.javafaker:javafaker:1.0.2'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
