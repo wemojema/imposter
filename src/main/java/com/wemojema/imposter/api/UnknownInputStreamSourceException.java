@@ -1,4 +1,4 @@
-package com.wemojema.doppelganger.api;
+package com.wemojema.imposter.api;
 
 public class UnknownInputStreamSourceException extends RuntimeException {
 

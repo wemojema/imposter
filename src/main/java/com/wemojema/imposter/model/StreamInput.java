@@ -1,20 +1,20 @@
-package com.wemojema.doppelganger.model;
+package com.wemojema.imposter.model;
 
+import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.core.JsonGenerator;
+import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.core.JsonParser;
 import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.core.JsonProcessingException;
-import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.DeserializationFeature;
-import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.MapperFeature;
-import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.ObjectMapper;
+import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.*;
+import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.module.SimpleModule;
 import com.amazonaws.services.lambda.runtime.events.*;
-import com.wemojema.doppelganger.api.UnknownInputStreamSourceException;
+import com.wemojema.imposter.api.UnknownInputStreamSourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 public class StreamInput {
@@ -98,7 +98,8 @@ public class StreamInput {
     }
 
     private boolean identifiesAsS3Event() {
-        return json.contains("\"aws:s3\"") &&
+        return json.replace(" ", "")
+                .contains("\"eventSource\":\"aws:s3\"") &&
                 json.contains("\"s3\"") &&
                 json.contains("\"object\"") &&
                 json.contains("\"bucket\"") &&
@@ -135,10 +136,32 @@ public class StreamInput {
                 json.contains("\"httpMethod\"");
     }
 
+    public static class TimestampDeserializer extends JsonDeserializer<Date> {
+        @Override
+        public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(jsonParser.getValueAsLong());
+            return calendar.getTime();
+        }
+    }
+
+    public static class TimestampSerializer extends JsonSerializer<Date> {
+        @Override
+        public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+            jsonGenerator.writeString(date.toString());
+        }
+    }
+
     private <T> T map(Class<T> clazz) {
         try {
+
             ObjectMapper objectMapper = new ObjectMapper();
+            SimpleModule module = new SimpleModule();
+            module.addSerializer(Date.class, new TimestampSerializer());
+            module.addDeserializer(Date.class, new TimestampDeserializer());
+            objectMapper.registerModule(module);
             objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+
             return objectMapper
                     .readerFor(clazz)
                     .withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)

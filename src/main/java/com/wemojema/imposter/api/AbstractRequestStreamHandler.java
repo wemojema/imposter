@@ -1,9 +1,9 @@
-package com.wemojema.doppelganger.api;
+package com.wemojema.imposter.api;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.amazonaws.services.lambda.runtime.events.*;
-import com.wemojema.doppelganger.model.StreamInput;
+import com.wemojema.imposter.model.StreamInput;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,15 +38,25 @@ public abstract class AbstractRequestStreamHandler implements RequestStreamHandl
         }
     }
 
-    public abstract void handle(APIGatewayV2HTTPEvent event);
+    public void handle(APIGatewayV2HTTPEvent event) {
+        throwMissingHandlerException(event.getClass());
+    }
 
-    public abstract void handle(SQSEvent event);
+    public void handle(SQSEvent event) {
+        throwMissingHandlerException(event.getClass());
+    }
 
-    public abstract void handle(DynamodbEvent event);
+    public void handle(DynamodbEvent event) {
+        throwMissingHandlerException(event.getClass());
+    }
 
-    public abstract void handle(ApplicationLoadBalancerRequestEvent event);
+    public void handle(ApplicationLoadBalancerRequestEvent event) {
+        throwMissingHandlerException(event.getClass());
+    }
 
-    public abstract void handle(S3Event event);
+    public void handle(S3Event event) {
+        throwMissingHandlerException(event.getClass());
+    }
 
     private <T> void throwMissingHandlerException(Class<T> clazz) {
         throw new MissingHandlerException("The Handler for the " + clazz.getSimpleName() +

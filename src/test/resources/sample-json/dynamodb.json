@@ -1,93 +1,130 @@
 {
   "Records": [
     {
-      "eventID": "c4ca4238a0b923820dcc509a6f75849b",
+      "eventID": "e74b526905d8af80d6d34b446f833249",
       "eventName": "INSERT",
       "eventVersion": "1.1",
       "eventSource": "aws:dynamodb",
       "awsRegion": "us-east-1",
       "dynamodb": {
+        "ApproximateCreationDateTime": 1.667575198E9,
         "Keys": {
-          "Id": {
-            "N": "101"
+          "rangeKey": {
+            "S": "COMMAND|0|8876fa1f"
+          },
+          "hashKey": {
+            "S": "User|5b83f690-f0a2-487d-809e-8733a4589a96"
           }
         },
         "NewImage": {
-          "Message": {
-            "S": "New item!"
+          "applicationVersion": {
+            "S": "37d6da83"
           },
-          "Id": {
-            "N": "101"
+          "hashKey": {
+            "S": "User|5b83f690-f0a2-487d-809e-8733a4589a96"
+          },
+          "streamId": {
+            "S": "User|5b83f690-f0a2-487d-809e-8733a4589a96"
+          },
+          "causationId": {
+            "S": "5bc6a5f1-c2aa-4e48-9e52-9bb420001786"
+          },
+          "messageId": {
+            "S": "5bc6a5f1-c2aa-4e48-9e52-9bb420001786"
+          },
+          "version": {
+            "N": "0"
+          },
+          "rangeKey": {
+            "S": "COMMAND|0|8876fa1f"
+          },
+          "envelope": {
+            "S": "{\"messageHeader\":{\"aggregateType\":\"com.ageofmithril.app.model.user.User\",\"streamId\":\"User|5b83f690-f0a2-487d-809e-8733a4589a96\",\"messageType\":\"RegisterUser\",\"category\":\"COMMAND\",\"timestamp\":1667575197.877000000,\"version\":0,\"causationId\":\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\",\"messageId\":\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\",\"messageChainId\":\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\",\"customHeader\":{}},\"serializedMessage\":\"{\\\"@type\\\":\\\"com.ageofmithril.app.model.user.command.RegisterUser\\\",\\\"messageHeader\\\":{\\\"aggregateType\\\":\\\"com.ageofmithril.app.model.user.User\\\",\\\"streamId\\\":\\\"User|5b83f690-f0a2-487d-809e-8733a4589a96\\\",\\\"messageType\\\":\\\"RegisterUser\\\",\\\"category\\\":\\\"COMMAND\\\",\\\"timestamp\\\":1667575197.877000000,\\\"version\\\":0,\\\"causationId\\\":\\\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\\\",\\\"messageId\\\":\\\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\\\",\\\"messageChainId\\\":\\\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\\\",\\\"customHeader\\\":{}},\\\"registration\\\":{\\\"userId\\\":\\\"5b83f690-f0a2-487d-809e-8733a4589a96\\\",\\\"username\\\":\\\"test-user\\\",\\\"email\\\":\\\"jtuller@gmail.com\\\",\\\"hashedPassword\\\":\\\"0eec8105282b533b19a65fc4bb528487c978686ec7b156d92abad4ebd783d04ea1c267492c6b752fdbbbb6e2766dc4b3a9a5beef41628e62595654d3ab9e8a9b\\\"}}\"}"
+          },
+          "messageType": {
+            "S": "RegisterUser"
+          },
+          "correlationId": {
+            "S": "5bc6a5f1-c2aa-4e48-9e52-9bb420001786"
+          },
+          "ddbVersion": {
+            "N": "1"
+          },
+          "category": {
+            "S": "COMMAND"
+          },
+          "timestamp": {
+            "N": "1667575197877"
           }
         },
-        "ApproximateCreationDateTime": 1428537600,
-        "SequenceNumber": "4421584500000000017450439091",
-        "SizeBytes": 26,
-        "StreamViewType": "NEW_AND_OLD_IMAGES"
+        "SequenceNumber": "380600000000079681128454",
+        "SizeBytes": 1659,
+        "StreamViewType": "NEW_IMAGE"
       },
-      "eventSourceARN": "arn:aws:dynamodb:us-east-1:123456789012:table/ExampleTableWithStream/stream/2015-06-27T00:48:05.899"
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:353732995325:table/dev-aom-event-store/stream/2022-11-04T14:49:31.983"
     },
     {
-      "eventID": "c81e728d9d4c2f636f067f89cc14862c",
-      "eventName": "MODIFY",
+      "eventID": "95d1dbda4776d18bd1a752caa787a794",
+      "eventName": "INSERT",
       "eventVersion": "1.1",
       "eventSource": "aws:dynamodb",
       "awsRegion": "us-east-1",
       "dynamodb": {
+        "ApproximateCreationDateTime": 1.667575198E9,
         "Keys": {
-          "Id": {
-            "N": "101"
+          "rangeKey": {
+            "S": "EVENT|1"
+          },
+          "hashKey": {
+            "S": "User|5b83f690-f0a2-487d-809e-8733a4589a96"
           }
         },
         "NewImage": {
-          "Message": {
-            "S": "This item has changed"
+          "applicationVersion": {
+            "S": "37d6da83"
           },
-          "Id": {
-            "N": "101"
+          "hashKey": {
+            "S": "User|5b83f690-f0a2-487d-809e-8733a4589a96"
+          },
+          "streamId": {
+            "S": "User|5b83f690-f0a2-487d-809e-8733a4589a96"
+          },
+          "causationId": {
+            "S": "5bc6a5f1-c2aa-4e48-9e52-9bb420001786"
+          },
+          "messageId": {
+            "S": "7b1abe9a-6924-4577-9ab6-451bbb1d7676"
+          },
+          "version": {
+            "N": "1"
+          },
+          "rangeKey": {
+            "S": "EVENT|1"
+          },
+          "envelope": {
+            "S": "{\"messageHeader\":{\"aggregateType\":\"com.ageofmithril.app.model.user.User\",\"streamId\":\"User|5b83f690-f0a2-487d-809e-8733a4589a96\",\"messageType\":\"UserRegistered\",\"category\":\"EVENT\",\"timestamp\":1667575197.896000000,\"version\":1,\"causationId\":\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\",\"messageId\":\"7b1abe9a-6924-4577-9ab6-451bbb1d7676\",\"messageChainId\":\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\",\"customHeader\":{}},\"serializedMessage\":\"{\\\"@type\\\":\\\"com.ageofmithril.app.model.user.event.UserRegistered\\\",\\\"messageHeader\\\":{\\\"aggregateType\\\":\\\"com.ageofmithril.app.model.user.User\\\",\\\"streamId\\\":\\\"User|5b83f690-f0a2-487d-809e-8733a4589a96\\\",\\\"messageType\\\":\\\"UserRegistered\\\",\\\"category\\\":\\\"EVENT\\\",\\\"timestamp\\\":1667575197.896000000,\\\"version\\\":1,\\\"causationId\\\":\\\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\\\",\\\"messageId\\\":\\\"7b1abe9a-6924-4577-9ab6-451bbb1d7676\\\",\\\"messageChainId\\\":\\\"5bc6a5f1-c2aa-4e48-9e52-9bb420001786\\\",\\\"customHeader\\\":{}},\\\"userRegistration\\\":{\\\"userId\\\":\\\"5b83f690-f0a2-487d-809e-8733a4589a96\\\",\\\"username\\\":\\\"test-user\\\",\\\"email\\\":\\\"jtuller@gmail.com\\\",\\\"hashedPassword\\\":\\\"0eec8105282b533b19a65fc4bb528487c978686ec7b156d92abad4ebd783d04ea1c267492c6b752fdbbbb6e2766dc4b3a9a5beef41628e62595654d3ab9e8a9b\\\"}}\"}"
+          },
+          "messageType": {
+            "S": "UserRegistered"
+          },
+          "correlationId": {
+            "S": "5bc6a5f1-c2aa-4e48-9e52-9bb420001786"
+          },
+          "ddbVersion": {
+            "N": "1"
+          },
+          "category": {
+            "S": "EVENT"
+          },
+          "timestamp": {
+            "N": "1667575197896"
           }
         },
-        "OldImage": {
-          "Message": {
-            "S": "New item!"
-          },
-          "Id": {
-            "N": "101"
-          }
-        },
-        "ApproximateCreationDateTime": 1428537600,
-        "SequenceNumber": "4421584500000000017450439092",
-        "SizeBytes": 59,
-        "StreamViewType": "NEW_AND_OLD_IMAGES"
+        "SequenceNumber": "380700000000079681128494",
+        "SizeBytes": 1642,
+        "StreamViewType": "NEW_IMAGE"
       },
-      "eventSourceARN": "arn:aws:dynamodb:us-east-1:123456789012:table/ExampleTableWithStream/stream/2015-06-27T00:48:05.899"
-    },
-    {
-      "eventID": "eccbc87e4b5ce2fe28308fd9f2a7baf3",
-      "eventName": "REMOVE",
-      "eventVersion": "1.1",
-      "eventSource": "aws:dynamodb",
-      "awsRegion": "us-east-1",
-      "dynamodb": {
-        "Keys": {
-          "Id": {
-            "N": "101"
-          }
-        },
-        "OldImage": {
-          "Message": {
-            "S": "This item has changed"
-          },
-          "Id": {
-            "N": "101"
-          }
-        },
-        "ApproximateCreationDateTime": 1428537600,
-        "SequenceNumber": "4421584500000000017450439093",
-        "SizeBytes": 38,
-        "StreamViewType": "NEW_AND_OLD_IMAGES"
-      },
-      "eventSourceARN": "arn:aws:dynamodb:us-east-1:123456789012:table/ExampleTableWithStream/stream/2015-06-27T00:48:05.899"
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:353732995325:table/dev-aom-event-store/stream/2022-11-04T14:49:31.983"
     }
   ]
 }
