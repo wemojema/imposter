@@ -23,6 +23,10 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
             AbstractRequestStreamHandlerTest.class.getClassLoader().getResourceAsStream("sample-json/dynamodb.json")
             , "sample json InputStream cannot be null"
     );
+    InputStream httpApiGateway = Objects.requireNonNull(
+            AbstractRequestStreamHandlerTest.class.getClassLoader().getResourceAsStream("sample-json/http-apigateway.json")
+            , "sample http api gateway cannot be null"
+    );
     InputStream s3InputStream = Objects.requireNonNull(
             AbstractRequestStreamHandlerTest.class.getClassLoader().getResourceAsStream("sample-json/s3event.json")
             , "sample json InputStream cannot be null"
@@ -102,6 +106,12 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
     void should_identify_a_DynamodbEvent_when_provided_a_valid_payload_for_such_an_event() {
         uut.handleRequest(ddbInputStream, new ByteArrayOutputStream(), null);
         Assertions.assertEquals("handle(DynamodbEvent event)", uut.invokedMethod);
+    }
+
+    @Test
+    void should_identify_as_an_apigateway_event_when_provided_http_apigw_events() {
+        uut.handleRequest(httpApiGateway, new ByteArrayOutputStream(), null);
+        Assertions.assertEquals("handle(APIGatewayV2HTTPEvent event)", uut.invokedMethod);
     }
 
 //    @Test

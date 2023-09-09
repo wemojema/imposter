@@ -66,7 +66,7 @@ public class StreamInput {
     }
 
     private void identify() {
-        if (identifiesAsAPIGatewayV2HTTPEvent()) {
+        if (identifiesAsAPIGatewayV2HTTPEvent() || identifiesAsHTTPAPIGWEvent()) {
             this.type = APIGatewayV2HTTPEvent.class;
             return;
         }
@@ -86,6 +86,7 @@ public class StreamInput {
             this.type = S3Event.class;
             return;
         }
+
         // todo identify other input streams here
         logger.error("Unable to identify this input stream:\n" + this.json);
         throw new UnknownInputStreamSourceException("InputStream must be one of the following Types: [" +
@@ -134,6 +135,15 @@ public class StreamInput {
         return json.contains("\"elb\"") &&
                 json.contains("\"targetGroupArn\"") &&
                 json.contains("\"httpMethod\"");
+    }
+
+    private boolean identifiesAsHTTPAPIGWEvent() {
+        return json.contains("\"path\"") &&
+                json.contains("\"headers\"") &&
+                json.contains("\"multiValueHeaders\"") &&
+                json.contains("\"resource\"") &&
+                json.contains("\"requestContext\"") &&
+                json.contains("\"body\"");
     }
 
     public static class TimestampDeserializer extends JsonDeserializer<Date> {

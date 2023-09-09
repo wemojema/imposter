@@ -1,0 +1,83 @@
+{
+  "version": "1.0",
+  "resource": "$default",
+  "path": "/sample/path",
+  "httpMethod": "GET",
+  "headers": {
+    "Content-Length": "0",
+    "Host": "oho1s4g5b1.execute-api.us-east-1.amazonaws.com",
+    "User-Agent": "insomnia/2023.3.0",
+    "X-Amzn-Trace-Id": "Root=1-64fcc494-75801f796a554c766c4b5632",
+    "X-Forwarded-For": "75.44.100.159",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https",
+    "accept": "*/*",
+    "authorization": "bearer 45aea7e866400c917f9e8615134ed889"
+  },
+  "multiValueHeaders": {
+    "Content-Length": [
+      "0"
+    ],
+    "Host": [
+      "oho1s4g5b1.execute-api.us-east-1.amazonaws.com"
+    ],
+    "User-Agent": [
+      "insomnia/2023.3.0"
+    ],
+    "X-Amzn-Trace-Id": [
+      "Root=1-64fcc494-75801f796a554c766c4b5632"
+    ],
+    "X-Forwarded-For": [
+      "75.44.100.159"
+    ],
+    "X-Forwarded-Port": [
+      "443"
+    ],
+    "X-Forwarded-Proto": [
+      "https"
+    ],
+    "accept": [
+      "*/*"
+    ],
+    "authorization": [
+      "bearer 45aea7e866400c917f9e8615134ed889"
+    ]
+  },
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "requestContext": {
+    "accountId": "353732995325",
+    "apiId": "oho1s4g5b1",
+    "domainName": "oho1s4g5b1.execute-api.us-east-1.amazonaws.com",
+    "domainPrefix": "oho1s4g5b1",
+    "extendedRequestId": "LAOnQhx5oAMEPBA=",
+    "httpMethod": "GET",
+    "identity": {
+      "accessKey": null,
+      "accountId": null,
+      "caller": null,
+      "cognitoAmr": null,
+      "cognitoAuthenticationProvider": null,
+      "cognitoAuthenticationType": null,
+      "cognitoIdentityId": null,
+      "cognitoIdentityPoolId": null,
+      "principalOrgId": null,
+      "sourceIp": "75.44.100.159",
+      "user": null,
+      "userAgent": "insomnia/2023.3.0",
+      "userArn": null
+    },
+    "path": "/ref/units",
+    "protocol": "HTTP/1.1",
+    "requestId": "LAOnQhx5oAMEPBA=",
+    "requestTime": "09/Sep/2023:19:16:36 +0000",
+    "requestTimeEpoch": 1694286996552,
+    "resourceId": "$default",
+    "resourcePath": "$default",
+    "stage": "$default"
+  },
+  "pathParameters": null,
+  "stageVariables": null,
+  "body": null,
+  "isBase64Encoded": false
+}
