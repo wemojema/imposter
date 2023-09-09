@@ -66,6 +66,10 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
         public void handle(ApplicationLoadBalancerRequestEvent event) {
             this.invokedMethod = "handle(ApplicationLoadBalancerRequestEvent event)";
         }
+        @Override
+        public void handle(APIGatewayProxyRequestEvent event) {
+            this.invokedMethod = "handle(APIGatewayProxyRequestEvent event)";
+        }
     }
 
     UUT uut;
@@ -111,7 +115,7 @@ class AbstractRequestStreamHandlerTest extends AbstractTest {
     @Test
     void should_identify_as_an_apigateway_event_when_provided_http_apigw_events() {
         uut.handleRequest(httpApiGateway, new ByteArrayOutputStream(), null);
-        Assertions.assertEquals("handle(APIGatewayV2HTTPEvent event)", uut.invokedMethod);
+        Assertions.assertEquals("handle(APIGatewayProxyRequestEvent event)", uut.invokedMethod);
     }
 
 //    @Test

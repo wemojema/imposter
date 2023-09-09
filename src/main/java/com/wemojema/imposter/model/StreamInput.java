@@ -65,8 +65,14 @@ public class StreamInput {
         return map(S3Event.class);
     }
 
+
+    public APIGatewayProxyRequestEvent asAPIGatewayProxyRequestEvent() {
+        return map(APIGatewayProxyRequestEvent.class);
+    }
+
+
     private void identify() {
-        if (identifiesAsAPIGatewayV2HTTPEvent() || identifiesAsHTTPAPIGWEvent()) {
+        if (identifiesAsAPIGatewayV2HTTPEvent()) {
             this.type = APIGatewayV2HTTPEvent.class;
             return;
         }
@@ -86,11 +92,16 @@ public class StreamInput {
             this.type = S3Event.class;
             return;
         }
+        if (identifiesAsHTTPAPIGWEvent()) {
+            this.type = APIGatewayProxyRequestEvent.class;
+            return;
+        }
 
         // todo identify other input streams here
         logger.error("Unable to identify this input stream:\n" + this.json);
         throw new UnknownInputStreamSourceException("InputStream must be one of the following Types: [" +
                 "APIGatewayV2HTTPEvent, " +
+                "APIGatewayProxyRequestEvent, " +
                 "ApplicationLoadBalancerRequestEvent, " +
                 "DynamodbEvent, " +
                 "S3Event, " +
@@ -145,7 +156,6 @@ public class StreamInput {
                 json.contains("\"requestContext\"") &&
                 json.contains("\"body\"");
     }
-
     public static class TimestampDeserializer extends JsonDeserializer<Date> {
         @Override
         public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {

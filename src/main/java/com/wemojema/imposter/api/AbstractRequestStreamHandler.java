@@ -20,6 +20,9 @@ public abstract class AbstractRequestStreamHandler implements RequestStreamHandl
         StreamInput streamInput = new StreamInput(input);
         this.inputStream = streamInput.asInputStream();
         switch (streamInput.identifiesAs().getSimpleName()) {
+            case "APIGatewayProxyRequestEvent":
+                handle(streamInput.asAPIGatewayProxyRequestEvent());
+                break;
             case "APIGatewayV2HTTPEvent":
                 handle(streamInput.asApiGWEvent());
                 break;
@@ -36,6 +39,10 @@ public abstract class AbstractRequestStreamHandler implements RequestStreamHandl
                 handle(streamInput.asS3Event());
                 break;
         }
+    }
+
+    public void handle(APIGatewayProxyRequestEvent event) {
+        throwMissingHandlerException(event.getClass());
     }
 
     public void handle(APIGatewayV2HTTPEvent event) {
