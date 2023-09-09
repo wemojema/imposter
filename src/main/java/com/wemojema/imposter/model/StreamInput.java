@@ -87,7 +87,7 @@ public class StreamInput {
             return;
         }
         // todo identify other input streams here
-
+        logger.error("Unable to identify this input stream:\n" + this.json);
         throw new UnknownInputStreamSourceException("InputStream must be one of the following Types: [" +
                 "APIGatewayV2HTTPEvent, " +
                 "ApplicationLoadBalancerRequestEvent, " +
