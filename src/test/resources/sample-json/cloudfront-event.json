@@ -1,0 +1,50 @@
+{
+  "version": "2.0",
+  "routeKey": "$default",
+  "rawPath": "/",
+  "rawQueryString": "",
+  "cookies": null,
+  "headers": {
+    "x-amzn-lambda-proxying-cell": "0",
+    "content-length": "0",
+    "x-amzn-tls-version": "TLSv1.2",
+    "x-forwarded-proto": "https",
+    "x-forwarded-port": "443",
+    "x-forwarded-for": "2600:1700:eda0:4f30:6247:8225:2685:a606",
+    "x-amzn-lambda-proxy-auth": "HmacSHA256, SignedHeaders=x-amzn-lambda-forwarded-client-ip;x-amzn-lambda-forwarded-host;x-amzn-lambda-proxying-cell, Signature=7MePWTBFfUi8raKw4OngksNd7oE5yB+Jrox3hkNUgWg=",
+    "via": "2.0 4ab6332ad5f85c451b620ed19dfdcccc.cloudfront.net (CloudFront)",
+    "x-amzn-lambda-forwarded-client-ip": "18.68.1.147",
+    "x-amzn-tls-cipher-suite": "ECDHE-RSA-AES128-GCM-SHA256",
+    "x-amzn-trace-id": "Self=1-651ae6d5-656ba18c12febbe63ecdf02a;Root=1-651ae6d5-1781b54c17523fe761355597",
+    "host": "zpuh6ov7yu7a2zf5pggum3x6fm0fqbbq.cell-1-lambda-url.us-east-1.on.aws",
+    "x-amzn-lambda-forwarded-host": "zpuh6ov7yu7a2zf5pggum3x6fm0fqbbq.lambda-url.us-east-1.on.aws",
+    "cache-control": "max-age=0",
+    "accept-encoding": "gzip,deflate",
+    "x-amz-cf-id": "E7xWp25RTXB5wUPQHUtp6c6t24H3t-7zF6UkB5z1pJBjws9sJixONQ==",
+    "user-agent": "Amazon CloudFront"
+  },
+  "queryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "body": null,
+  "isBase64Encoded": false,
+  "requestContext": {
+    "routeKey": "$default",
+    "accountId": "anonymous",
+    "stage": "$default",
+    "apiId": "zpuh6ov7yu7a2zf5pggum3x6fm0fqbbq",
+    "domainName": "zpuh6ov7yu7a2zf5pggum3x6fm0fqbbq.cell-1-lambda-url.us-east-1.on.aws",
+    "domainPrefix": "zpuh6ov7yu7a2zf5pggum3x6fm0fqbbq",
+    "time": "02/Oct/2023:19:50:45 +0000",
+    "timeEpoch": 1696261845567,
+    "http": {
+      "method": "GET",
+      "path": "/",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "18.68.1.147",
+      "userAgent": "Amazon CloudFront"
+    },
+    "authorizer": null,
+    "requestId": "8ee59b94-1008-408d-af25-35c50996f749"
+  }
+}
