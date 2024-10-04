@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.wemojema'
-version '0.4.3'
+version '0.4.6'
 
 repositories {
     mavenLocal()
@@ -16,13 +16,13 @@ compileJava
 processResources
 
 dependencies {
-    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
-    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
-    implementation 'com.amazonaws:aws-lambda-java-serialization:1.0.0'
+    api 'com.amazonaws:aws-lambda-java-events:3.14.0'
+    api 'com.amazonaws:aws-lambda-java-core:1.2.3'
+    api "com.amazonaws:aws-lambda-java-serialization:1.1.5"
     implementation 'org.slf4j:slf4j-api:1.7.36'
 
     testImplementation 'io.symphonia:lambda-logging:1.0.3'
-    implementation 'com.github.javafaker:javafaker:1.0.2'
+    testImplementation 'com.github.javafaker:javafaker:1.0.2'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
