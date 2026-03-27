@@ -2,8 +2,6 @@ package com.wemojema;
 
 import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.core.JsonProcessingException;
 import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.ObjectMapper;
-import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.databind.json.JsonMapper;
-import com.github.javafaker.Faker;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -11,7 +9,6 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class AbstractTest {
 
-    protected static Faker faker = new Faker();
     ObjectMapper objectMapper = new ObjectMapper();
 
     protected InputStream inputStreamOf(Object object) throws JsonProcessingException {

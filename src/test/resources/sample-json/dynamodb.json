@@ -61,7 +61,7 @@
         "SizeBytes": 1659,
         "StreamViewType": "NEW_IMAGE"
       },
-      "eventSourceARN": "arn:aws:dynamodb:us-east-1:353732995325:table/dev-aom-event-store/stream/2022-11-04T14:49:31.983"
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:123456789012:table/dev-aom-event-store/stream/2022-11-04T14:49:31.983"
     },
     {
       "eventID": "95d1dbda4776d18bd1a752caa787a794",
@@ -124,7 +124,7 @@
         "SizeBytes": 1642,
         "StreamViewType": "NEW_IMAGE"
       },
-      "eventSourceARN": "arn:aws:dynamodb:us-east-1:353732995325:table/dev-aom-event-store/stream/2022-11-04T14:49:31.983"
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:123456789012:table/dev-aom-event-store/stream/2022-11-04T14:49:31.983"
     }
   ]
 }

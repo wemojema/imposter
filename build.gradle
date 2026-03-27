@@ -1,19 +1,24 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'signing'
     id 'idea'
 }
 
 group 'com.wemojema'
-version '0.4.6'
+version = project.findProperty('version') ?: '1.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withJavadocJar()
+    withSourcesJar()
+}
 
 repositories {
     mavenLocal()
     mavenCentral()
 }
-
-compileJava
-processResources
 
 dependencies {
     api 'com.amazonaws:aws-lambda-java-events:3.14.0'
@@ -22,7 +27,6 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.36'
 
     testImplementation 'io.symphonia:lambda-logging:1.0.3'
-    testImplementation 'com.github.javafaker:javafaker:1.0.2'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
@@ -31,10 +35,9 @@ dependencies {
 test {
     useJUnitPlatform()
     testLogging {
-        events "passed","skipped","failed"
+        events "passed", "skipped", "failed"
     }
 }
-
 
 publishing {
     publications {
@@ -43,10 +46,48 @@ publishing {
             from components.java
             pom {
                 name = 'imposter'
-                description = 'A Java Library to identify the origin of ' +
-                        'an inbound InputStream in an AWS Lambda ' +
-                        'StreamHandler implementation.'
+                description = 'A Java library that identifies the AWS event source of an inbound InputStream in a Lambda StreamHandler, enabling a single Lambda function to handle multiple event sources.'
+                url = 'https://github.com/wemojema/imposter'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'wemojema'
+                        name = 'wemojema'
+                        email = 'wemojema@users.noreply.github.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/wemojema/imposter.git'
+                    developerConnection = 'scm:git:ssh://github.com/wemojema/imposter.git'
+                    url = 'https://github.com/wemojema/imposter'
+                }
             }
         }
     }
+    repositories {
+        maven {
+            name = 'OSSRH'
+            def releasesUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            url = version.endsWith('SNAPSHOT') ? snapshotsUrl : releasesUrl
+            credentials {
+                username = System.getenv('OSSRH_USERNAME') ?: ''
+                password = System.getenv('OSSRH_TOKEN') ?: ''
+            }
+        }
+    }
+}
+
+signing {
+    def signingKey = System.getenv('SIGNING_KEY')
+    def signingPassword = System.getenv('SIGNING_PASSWORD')
+    if (signingKey && signingPassword) {
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    }
+    sign publishing.publications.mavenJava
 }
