@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'idea'
+    id 'com.gradleup.nmcp' version '0.0.4'
 }
 
 group 'com.wemojema'
@@ -69,17 +70,15 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            name = 'OSSRH'
-            def releasesUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
-            def snapshotsUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
-            url = version.endsWith('SNAPSHOT') ? snapshotsUrl : releasesUrl
-            credentials {
-                username = System.getenv('OSSRH_USERNAME') ?: ''
-                password = System.getenv('OSSRH_TOKEN') ?: ''
-            }
-        }
+    }
+}
+
+nmcp {
+    publishAllPublicationsToCentralPortal {
+        username = System.getenv('MAVEN_CENTRAL_USERNAME') ?: ''
+        password = System.getenv('MAVEN_CENTRAL_TOKEN') ?: ''
+        // AUTOMATIC releases immediately after validation; USER_MANAGED holds in portal for manual review
+        publishingType = 'AUTOMATIC'
     }
 }
 

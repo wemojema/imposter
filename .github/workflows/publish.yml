@@ -22,9 +22,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Publish to Maven Central
-        run: ./gradlew publish -Pversion=${GITHUB_REF_NAME#v}
+        run: ./gradlew publishAllPublicationsToCentralPortal -Pversion=${GITHUB_REF_NAME#v}
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
