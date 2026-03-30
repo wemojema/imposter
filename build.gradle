@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'idea'
-    id 'com.gradleup.nmcp' version '0.0.4'
+    id 'com.gradleup.nmcp' version '1.4.4'
 }
 
 group 'com.wemojema'
