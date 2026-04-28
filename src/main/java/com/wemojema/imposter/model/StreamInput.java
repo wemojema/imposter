@@ -168,6 +168,10 @@ public class StreamInput {
     }
 
     private void identify() {
+        if (identifiesAsCognitoPreTokenGenerationEvent()) {
+            this.eventType = CognitoUserPoolPreTokenGenerationEvent.class;
+            return;
+        }
         if (identifiesAsAPIGatewayV2HTTPEvent()) {
             this.eventType = APIGatewayV2HTTPEvent.class;
             return;
@@ -215,6 +219,7 @@ public class StreamInput {
                 "APIGatewayProxyRequestEvent, " +
                 "ApplicationLoadBalancerRequestEvent, " +
                 "CloudFrontEvent, " +
+                "CognitoUserPoolPreTokenGenerationEvent, " +
                 "DynamodbEvent, " +
                 "KinesisEvent, " +
                 "S3Event, " +
@@ -222,6 +227,22 @@ public class StreamInput {
                 "SNSEvent, " +
                 "SQSEvent" +
                 "]");
+    }
+
+    /**
+     * Deserializes the payload as a {@link CognitoUserPoolPreTokenGenerationEvent}.
+     */
+    public CognitoUserPoolPreTokenGenerationEvent asCognitoPreTokenGenerationEvent() {
+        return map(CognitoUserPoolPreTokenGenerationEvent.class);
+    }
+
+    /**
+     * Cognito Pre Token Generation trigger: has top-level "triggerSource" starting with "TokenGeneration".
+     * Checked first as it has no overlap with HTTP or queue-based events.
+     */
+    private boolean identifiesAsCognitoPreTokenGenerationEvent() {
+        Object triggerSource = parsedJson.get("triggerSource");
+        return triggerSource instanceof String && ((String) triggerSource).startsWith("TokenGeneration");
     }
 
     /**
