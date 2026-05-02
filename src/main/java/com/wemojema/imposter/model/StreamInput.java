@@ -169,7 +169,7 @@ public class StreamInput {
 
     private void identify() {
         if (identifiesAsCognitoPreTokenGenerationEvent()) {
-            this.eventType = CognitoUserPoolPreTokenGenerationEvent.class;
+            this.eventType = CognitoUserPoolPreTokenGenerationEventV2.class;
             return;
         }
         if (identifiesAsAPIGatewayV2HTTPEvent()) {
@@ -234,6 +234,13 @@ public class StreamInput {
      */
     public CognitoUserPoolPreTokenGenerationEvent asCognitoPreTokenGenerationEvent() {
         return map(CognitoUserPoolPreTokenGenerationEvent.class);
+    }
+
+    /**
+     * Deserializes the payload as a {@link CognitoUserPoolPreTokenGenerationEventV2}.
+     */
+    public CognitoUserPoolPreTokenGenerationEventV2 asCognitoPreTokenGenerationEventV2() {
+        return map(CognitoUserPoolPreTokenGenerationEventV2.class);
     }
 
     /**

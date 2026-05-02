@@ -25,8 +25,8 @@ public abstract class AbstractRequestStreamHandler implements RequestStreamHandl
         StreamInput streamInput = new StreamInput(input);
         this.inputStream = streamInput.asInputStream();
         Class<?> eventType = streamInput.identifiesAs();
-        if (eventType == CognitoUserPoolPreTokenGenerationEvent.class) {
-            handle(streamInput.asCognitoPreTokenGenerationEvent());
+        if (eventType == CognitoUserPoolPreTokenGenerationEventV2.class) {
+            handle(streamInput.asCognitoPreTokenGenerationEventV2());
         } else if (eventType == APIGatewayProxyRequestEvent.class) {
             handle(streamInput.asAPIGatewayProxyRequestEvent());
         } else if (eventType == APIGatewayV2HTTPEvent.class) {
@@ -50,6 +50,15 @@ public abstract class AbstractRequestStreamHandler implements RequestStreamHandl
         } else {
             handleUnknown(this.inputStream);
         }
+    }
+
+    /**
+     * Handle a Cognito User Pool Pre Token Generation V2 trigger.
+     * Override this method to enrich JWT claims (including access token claims) before Cognito issues the token.
+     * Receives all TokenGeneration_* trigger sources (Authentication, HostedAuth, RefreshTokens, etc.).
+     */
+    public void handle(CognitoUserPoolPreTokenGenerationEventV2 event) {
+        throwMissingHandlerException(event.getClass());
     }
 
     /**
